@@ -1,0 +1,347 @@
+[
+    {
+        "id": "5837589b.240268",
+        "type": "mqtt out",
+        "z": "b0556848.663748",
+        "name": "mqtt_publisher",
+        "topic": "train_data/live_stream",
+        "qos": "0",
+        "retain": "",
+        "broker": "d60bc7ca.0f444",
+        "x": 853,
+        "y": 396,
+        "wires": []
+    },
+    {
+        "id": "5d59a65c.b37aa8",
+        "type": "mqtt in",
+        "z": "b0556848.663748",
+        "name": "mqtt_subscriber",
+        "topic": "train_data/live_stream",
+        "qos": "2",
+        "broker": "d60bc7ca.0f444",
+        "x": 118,
+        "y": 141,
+        "wires": [
+            [
+                "c0f284dd.904aa"
+            ]
+        ]
+    },
+    {
+        "id": "c0f284dd.904aa",
+        "type": "json",
+        "z": "b0556848.663748",
+        "name": "to JSON ",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 298.599365234375,
+        "y": 141.09091186523438,
+        "wires": [
+            [
+                "4c0fe894.04e0a"
+            ]
+        ]
+    },
+    {
+        "id": "3b267baf.13af3c",
+        "type": "inject",
+        "z": "b0556848.663748",
+        "name": "injecter",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 141,
+        "y": 544,
+        "wires": [
+            [
+                "9d2c6926.7e281"
+            ]
+        ]
+    },
+    {
+        "id": "9d2c6926.7e281",
+        "type": "function",
+        "z": "b0556848.663748",
+        "name": "mock_data",
+        "func": "var d = new Date();\nvar ts = d.getTime();\nvar speed=Math.floor(Math.random() * 10) + 1;\nvar trsalgn=Math.floor(Math.random() * 10) + 1;\nvar trId=Math.floor(Math.random() * 2) + 1;\nmsg.payload =   \n         {'time':ts,\n          'sensorId':'Z3S4',\n          'trainId':'L'+trId,\n          'trackSwitchId':trsalgn,\n          'trackSwitchAlignment':'T',\n          'speed':speed,\n         };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 129,
+        "y": 388,
+        "wires": [
+            [
+                "5837589b.240268",
+                "fd7a4987.866988",
+                "ee45944a.20d84"
+            ]
+        ]
+    },
+    {
+        "id": "4c0fe894.04e0a",
+        "type": "function",
+        "z": "b0556848.663748",
+        "name": "to JSON object",
+        "func": "msg.payload =   \n         {'time':msg.payload.time,\n          'sensorId':msg.payload.sensorId,\n          'trainId':msg.payload.trainId,\n          'trackSwitchId':msg.payload.trackSwitchId,\n          'trackSwitchAlignment':msg.payload.trackSwitchAlignment,\n          'speed':msg.payload.speed\n         };\nreturn msg;\n\n\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 487,
+        "y": 141,
+        "wires": [
+            [
+                "12f8a9f2.dd60f6"
+            ]
+        ]
+    },
+    {
+        "id": "12f8a9f2.dd60f6",
+        "type": "debug",
+        "z": "b0556848.663748",
+        "name": "output",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 667,
+        "y": 138,
+        "wires": []
+    },
+    {
+        "id": "fd7a4987.866988",
+        "type": "switch",
+        "z": "b0556848.663748",
+        "name": "Switcher L1",
+        "property": "payload.trainId",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "L1",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 374,
+        "y": 277,
+        "wires": [
+            [
+                "185ad3dc.a8d3b4",
+                "2a084300.6d784e"
+            ]
+        ]
+    },
+    {
+        "id": "185ad3dc.a8d3b4",
+        "type": "debug",
+        "z": "b0556848.663748",
+        "name": "L1 out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 648,
+        "y": 348,
+        "wires": []
+    },
+    {
+        "id": "ee45944a.20d84",
+        "type": "switch",
+        "z": "b0556848.663748",
+        "name": "Switcher L2",
+        "property": "payload.trainId",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "L2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 389,
+        "y": 506,
+        "wires": [
+            [
+                "c994959c.96218",
+                "4bfdbb00.a72c3c"
+            ]
+        ]
+    },
+    {
+        "id": "c994959c.96218",
+        "type": "debug",
+        "z": "b0556848.663748",
+        "name": "L2 out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 657,
+        "y": 443,
+        "wires": []
+    },
+    {
+        "id": "a5d76152.72592",
+        "type": "ui_gauge",
+        "z": "b0556848.663748",
+        "name": "Speed Gauge",
+        "group": "a9641137.ef90d8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Speed",
+        "label": "km/hr",
+        "format": "{{msg.payload.speed}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 840,
+        "y": 277,
+        "wires": []
+    },
+    {
+        "id": "271fb426.abc8e4",
+        "type": "ui_gauge",
+        "z": "b0556848.663748",
+        "name": "Speed Gauge",
+        "group": "5187f293.46cac4",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Speed",
+        "label": "km/hr",
+        "format": "{{msg.payload.speed}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b0b5",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 867,
+        "y": 503,
+        "wires": []
+    },
+    {
+        "id": "2a084300.6d784e",
+        "type": "ui_template",
+        "z": "b0556848.663748",
+        "group": "a9641137.ef90d8",
+        "name": "L1 html",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<!DOCTYPE html>\n<html>\n<head>\n<style>\ntable {\n    font-family: arial, sans-serif;\n    border-collapse: collapse;\n    width: 100%;\n}\n\ntd, th {\n    border: 1px solid #dddddd;\n    text-align: left;\n    padding: 8px;\n}\nth {\n    color:#faff9c;\n}\n\n}\n</style>\n</head>\n<body>\n<table>\n  <tr>\n    <th>Timestamp</th>\n    <th>Sensor ID</th>\n    <th>Track Switch ID</th>\n    <th>Track Switch Alignment</th>\n  </tr>\n  <tr>\n    <td ng-bind-html=\"msg.payload.time\"></td>\n    <td ng-bind-html=\"msg.payload.sensorId\"></td>\n    <td ng-bind-html=\"msg.payload.trackSwitchId\"></td>\n    <td ng-bind-html=\"msg.payload.trackSwitchAlignment\"></td>\n  </tr>\n</table>\n</body>\n</html>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "templateScope": "local",
+        "x": 651,
+        "y": 277,
+        "wires": [
+            [
+                "a5d76152.72592"
+            ]
+        ]
+    },
+    {
+        "id": "4bfdbb00.a72c3c",
+        "type": "ui_template",
+        "z": "b0556848.663748",
+        "group": "5187f293.46cac4",
+        "name": "L2 html",
+        "order": 1,
+        "width": "0",
+        "height": "0",
+        "format": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <title>Loco</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"main.css\" />\n    <script src=\"main.js\"></script>\n</head>\n<style>\ntable {\n    font-family: arial, sans-serif;\n    border-collapse: collapse;\n    width: 100%;\n}\ntd, th {\n    border: 1px solid #dddddd;\n    text-align: left;\n    padding: 8px;\n}\n</style>\n<body>\n    <div>\n        <table>\n          <tr>\n            <th>Timestamp</th>\n            <th>Sensor ID</th>\n            <th>Track Switch ID</th>\n            <th>Track Switch Alignment</th>\n          </tr>\n          <tr>\n            <td ng-bind-html=\"msg.payload.time\"></td>\n            <td ng-bind-html=\"msg.payload.sensorId\"></td>\n            <td ng-bind-html=\"msg.payload.trackSwitchId\"></td>\n            <td ng-bind-html=\"msg.payload.trackSwitchAlignment\"></td>\n          </tr>\n        </table>\n    </div>\n</body>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "templateScope": "local",
+        "x": 675,
+        "y": 504,
+        "wires": [
+            [
+                "271fb426.abc8e4"
+            ]
+        ]
+    },
+    {
+        "id": "683d5df9.068d84",
+        "type": "comment",
+        "z": "b0556848.663748",
+        "name": "comment1",
+        "info": "Since live data is not available, mock data is generated using this fucntion.",
+        "x": 121,
+        "y": 330,
+        "wires": []
+    },
+    {
+        "id": "d60bc7ca.0f444",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "HiveMQ",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "tester",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "15",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    },
+    {
+        "id": "a9641137.ef90d8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Locomotive 1 ",
+        "tab": "8b319602.f9a54",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "5187f293.46cac4",
+        "type": "ui_group",
+        "z": "",
+        "name": "Locomotive 2",
+        "tab": "8b319602.f9a54",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8b319602.f9a54",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Real Time Dashboard",
+        "icon": "dashboard"
+    }
+]
